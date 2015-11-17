@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import sys
+import re
+
+def isContent(pos):
+     ret = re.search(r"(M|P|DT|DEG|DEC|DEV|DER|CC|CS|LC|AS|SP|MSP|LB|SB|BA)",pos)
+     return ret is None
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        sys.exit("you must provide filename")
+    
+    count = 0
+    with open(sys.argv[1],"r") as f:
+        for line in f:
+            line = line.rstrip()
+            if line=="" or line.startswith("#"):
+                print(line)
+                continue
+            tokens = line.split()
+            if tokens[4] == "PU":
+                tokens[5] = "-1"
+            elif isContent(tokens[4]):
+                tokens[5] = "1"
+            else:
+                tokens[5] = "0"
+            print("\t".join(tokens))

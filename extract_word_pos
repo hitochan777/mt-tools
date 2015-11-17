@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import fileinput
+
+for line in fileinput.input():
+    prevToken = None
+    for token in line.split():
+        if token[-1] == ')' and len(token) > 1:
+            closingMarkerLocation = token.find(')')
+            tokenName = token[0:closingMarkerLocation]
+            print("%s_%s " % (tokenName,prevToken[1:]),end="")
+        prevToken = token
+    print()	

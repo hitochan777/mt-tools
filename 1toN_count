@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import sys
+import fileinput
+from collections import defaultdict
+
+N = int(sys.argv[1])
+filename = sys.argv[2]
+
+count = 0
+with open(filename) as f:
+    id = 1
+    for line in f:
+        d = defaultdict(int)
+        links = line.strip().split()
+        for link in links:
+            findex, eindex = link.split("-")
+            d[eindex] += 1
+        for key, value in d.items():
+            if value==7:
+                print(id)
+            if value == N:
+                count += 1
+        id += 1
+
+print(count)

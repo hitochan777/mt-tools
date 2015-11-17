@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import fileinput
+
+def main():
+    parser = argparse.ArgumentParser(description="""
+    This program removes alignment links that are out of bounds.
+    """)
+    parser.add_argument('-f', '--source', required=True, type=str, help="Filename for tokenized source sentences")
+    parser.add_argument('-e', '--target', required=True, type=str, help="Filename for tokenized target sentences")
+    parser.add_argument('-a', '--alignment', required=True, type=str, help="Filename for alignement") 
+    
+    args = parser.parse_args()
+    
+    with open(args.source, "r") as f, open(args.target, "r") as e, open(args.alignment, "r") as a:
+        while True:
+            fline = f.readline()
+            eline = e.readline()
+            aline = a.readline()
+            if fline == "" or eline == "" or aline == "":
+                break
+            flen = len(fline.strip().split())
+            elen = len(eline.strip().split())
+            links = map(lambda link: tuple(map(int, link.split("-"))), aline.strip().split())
+            for link in links:
+                if link[0] < flen and link[1] < elen:
+                    print("%d-%d" % (link[0], link[1]), end=" ")
+            print() # print newline
+
+if __name__=="__main__":
+    main()   
