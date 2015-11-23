@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+import fileinput
+
+buffer=[]
+for line in fileinput.input():
+    if line.strip() == "" and len(buffer) > 0:
+        print(" ".join(buffer))
+        buffer = []
+    else:
+        infos = line.strip().split("\t") 
+        surface = infos[1]
+        pos = infos[3]
+        buffer.append("%s_%s" % (surface, pos))
+
+if len(buffer) > 0:
+    print(" ".join(buffer))
+
