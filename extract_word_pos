@@ -4,7 +4,7 @@ import fileinput
 
 for line in fileinput.input():
     prevToken = None
-    for token in line.split():
+    for token in line.split(" "):
         if token[-1] == ')' and len(token) > 1:
             closingMarkerLocation = token.find(')')
             tokenName = token[0:closingMarkerLocation]
