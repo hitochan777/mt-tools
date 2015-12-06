@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+import fileinput
+import sys
+import argparse
+import re
+
+def readOneParse(fp):
+    result = ""
+    line = ""
+    while True:
+        line = fp.readline()
+        if line=="": # End of line
+            return None, None
+        if line.startswith("#"):
+            id = int(re.search(r"ID=\s*(\d+)", line).group(1))
+            result = line
+            break
+    for line in fp:
+        if line.strip()=="":
+            break
+        result += line
+    return result, id
+
+def readBestParseForNextSentence(fp, curID):
+    while True:
+        parse, id = readOneParse(fp)
+        if parse == None:
+            return None, None
+        if curID != id:
+            return parse, id
+    return None, None
+
+def main():
+    parser = argparse.ArgumentParser(description="""
+    This program duplicates 1best source tree as many times as the number of trees for a target sentence.
+    Both source and target tree must be of EBMT format and each parse must be separated by **empty lines**.
+    """)
+    parser.add_argument('--ftree', required=True, type=str, help="Filename for source dependency tree")
+    parser.add_argument('--etree', required=True, type=str, help="Filename for target dependency tree")
+    parser.add_argument('--ain', required=True, type=str, help="Filename for alignement") 
+    parser.add_argument('--tout', metavar='filename', required=True, type=str, help="Output filename for duplicated trees")
+    parser.add_argument('--aout', metavar='filename', required=True, type=str, help="Output filename for duplicated alignments")
+    
+    args = parser.parse_args()
+    
+    with open(args.ftree, "r") as ftree, open(args.etree, "r") as etree, open(args.ain, "r") as ain, open(args.tout, "w") as tout, open(args.aout, "w") as aout:
+       fcurID = -1
+       eprevID = -1
+       count = 0
+       while True:
+           fparse, fcurID = readBestParseForNextSentence(ftree, fcurID)
+           alignment = ain.readline()
+           if fparse == None:
+               break
+           while True:
+               eparse, ecurID = readOneParse(etree)
+               if eprevID == -1:
+                   eprevID = ecurID
+               elif eparse == None or ecurID != eprevID:
+                   eprevID = ecurID
+                   break
+               count += 1
+           for i in range(count):
+               tout.write(fparse + "\n")
+               aout.write(alignment)
+           count = 1
+
+if __name__=="__main__":
+    main()
