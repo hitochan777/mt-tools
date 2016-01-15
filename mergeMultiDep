@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+import sys
+import re
+from collections import defaultdict
+from heapq import heappush, heappop
+
+def readFile(fp):
+    data = defaultdict(list)
+    buffer = []
+    prevId = None
+    for line in fp:
+        if line.strip() == "":
+            continue
+        if line.startswith("#"):
+            if len(buffer) > 0:
+                data[id].append((-score, buffer))
+
+            result = re.search(r"ID=(\d+)\s+SCORE=([-+]?[0-9]*\.?[0-9]+)", line)
+            if result is None:
+                print("Line starting with # must have ID=...")
+
+            id = int(result.group(1))
+            score = float(result.group(2))
+            buffer = [line]
+        else:
+            buffer.append(line)
+
+    if len(buffer) > 0:
+        data[id].append((-score, buffer))
+
+    return data
+
+fileNum = len(sys.argv) - 1
+
+if fileNum <= 1:
+    print("You need to specify at least two filenames to be merged")
+    sys.exit()
+
+mergedData = defaultdict(list)
+
+for filename in sys.argv[1:]:
+    with open(filename, "r") as fp:
+        data = readFile(fp)
+        for id, treeList in data.items():
+            for tree in treeList:
+                heappush(mergedData[id], tree)
+
+for treeList in sorted(mergedData.items()):
+    id = treeList[0]
+    while(treeList[1]):
+        score, tree = heappop(treeList[1])
+        for line in tree:
+            print(line, end="")
+        print()

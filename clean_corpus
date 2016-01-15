@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file1', type=str, help="first input file")
+    parser.add_argument('file2', type=str, help="second input file")
+    parser.add_argument('outfile1', type=str, help="output file for file1")
+    parser.add_argument('outfile2', type=str, help="output file for file2")
+    parser.add_argument('--threshold', type=float, default=5.0)
+    args = parser.parse_args()
+
+    with open(args.file1, "r") as f1, open(args.file2, "r") as f2, open(args.outfile1, "w") as of1, open(args.outfile2, "w") as of2:
+        while True:
+            line1 = f1.readline().strip()
+            line2 = f2.readline().strip()
+            if len(line1) == 0 or len(line2) == 0:
+                break
+
+            len1 = len(line1.split())
+            len2 = len(line2.split())
+            len1, len2 = min(len1, len2), max(len1, len2)
+            if len2/len1 <= args.threshold:
+                of1.write(line1+"\n")
+                of2.write(line2+"\n")

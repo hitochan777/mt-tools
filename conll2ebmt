@@ -49,8 +49,8 @@ if __name__ == "__main__":
             features = tokens[5]
             dep_id = tokens[6] - 1
             dep_label = tokens[7]
-            projective_head = tokens[8]
-            projective_dependency_label = tokens[9]
+            # projective_head = tokens[8]
+            # projective_dependency_label = tokens[9]
             isCont = pos in contList
 
             if pos in puncList:
