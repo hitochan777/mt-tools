@@ -19,8 +19,8 @@ if __name__ == "__main__":
             if len(line1) == 0 or len(line2) == 0:
                 break
 
-            len1 = len(line1.split())
-            len2 = len(line2.split())
+            len1 = len(line1.split(" "))
+            len2 = len(line2.split(" "))
             len1, len2 = min(len1, len2), max(len1, len2)
             if len2/len1 <= args.threshold:
                 of1.write(line1+"\n")

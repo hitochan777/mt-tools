@@ -13,15 +13,17 @@ with open(sys.argv[1],"r") as f:
             nbestList.append(cnt)
             cnt+=1 
         else:
-            splitted = line.split(delimiter, 1)[0]
+            splitted = line.split(delimiter, 1)
+            score = "0.0" # some random score
+            parse = ""
             if len(splitted) == 1: # when score is not present
-                score = 0.0 # some random score
                 parse = splitted[0]
             elif len(splitted) == 2:
                 score = splitted[0]
                 parse = splitted[1] 
 
             line = "; "+str(cnt)+"\t"+score+"\n"+parse
+            # print("hoge")
         if len(sys.argv) >= 3 and int(sys.argv[2]) == 1 :
             cnt += 1
 

@@ -40,7 +40,8 @@ if __name__ == "__main__":
                 count += 1
                 print("\n# ID=%d SCORE=1.000" % count)
                 continue
-            tokens = list(map(lambda x: int(x) if x.isdigit() else x, line.split("\t")))
+
+            tokens = list(map(lambda x: int(x) if re.search(r'^(\d)*$', x) else x, line.split("\t")))
             id = tokens[0] - 1
             surface = tokens[1]
             lemma = tokens[2]
