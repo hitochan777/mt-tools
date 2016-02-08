@@ -23,10 +23,14 @@ def overwrite(sline, tline):
 
     return " ".join(result)
         
-def containsAscii(s):
+def isSymbol(c):
+    symbols = ["。", "？", "！", "…"]
+    return ord(c) < 128 or c in symbols
+
+def containsSymbol(s):
     try:
         for c in s:
-            if ord(c) < 128:
+            if isSymbol(s):
                 return True     
     except:
         return False
@@ -45,7 +49,7 @@ def recover(sline, tline):
     swords = sline.split(" ") 
     swords_tmp = [swords[0]]
     for index in range(1, len(swords)):
-        if containsAscii(swords_tmp[-1][-1]) and containsAscii(swords[index][0]):
+        if containsSymbol(swords_tmp[-1][-1]) and containsSymbol(swords[index][0]):
             swords_tmp.append(swords_tmp.pop() + swords[index])
         else:
             swords_tmp.append(swords[index]) 
@@ -59,7 +63,7 @@ def recover(sline, tline):
     cutIndices = defaultdict(list)
     result = []
     for tp in range(len(twords)):
-        if containsAscii(twords[tp]):
+        if containsSymbol(twords[tp]):
             index = bisect_left(endList, twcnt)
             if index > 0:
                 cutIndices[index].append(twcnt - endList[index - 1])
@@ -73,7 +77,7 @@ def recover(sline, tline):
             start = 0
             for cutIndex in cutIndices[index]: # we know that cutIndices[index] is sorted from the beginning
                 word = token[start:cutIndex]
-                indices = findIndices(word, lambda x: not containsAscii(x)) # Actually indices will always be **singular list**
+                indices = findIndices(word, lambda x: not containsSymbol(x)) # Actually indices will always be **singular list**
                 if len(indices) == 0 or indices[0] == 0:
                     result.append(word)
 
@@ -86,7 +90,7 @@ def recover(sline, tline):
 
             if start != len(token):
                 word = token[start:]
-                indices = findIndices(word, lambda x: not containsAscii(x)) # Actually indices will always be **singular list**
+                indices = findIndices(word, lambda x: not containsSymbol(x)) # Actually indices will always be **singular list**
                 if len(indices) == 0 or indices[0] == 0:
                     result.append(word)
                 else:

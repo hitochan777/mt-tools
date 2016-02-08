@@ -56,5 +56,6 @@ if __name__=="__main__":
             buffer.append(line)
  
     if len(buffer)==3:
+        result = process(buffer)
         if result is not None:
             print(result)
