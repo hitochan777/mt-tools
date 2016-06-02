@@ -2,65 +2,33 @@
 
 import sys
 import re
-import argparse
 
-# http://lotus.kuee.kyoto-u.ac.jp/~john/kyotoebmt-advanced.html
+def isContent(pos):
+     ret = re.search(r"(M|P|DT|DEG|DEC|DEV|DER|CC|CS|LC|AS|SP|MSP|LB|SB|BA)",pos)
+     return ret is None
 
-# def isContent(pos):
-#      ret = re.search(r"(M|P|DT|DEG|DEC|DEV|DER|CC|CS|LC|AS|SP|MSP|LB|SB|BA)",pos)
-#      return ret is None
-
-def getList(filename):
-    if filename is None:
-        return []
-    li = []
-    with open(filename, "r") as f:
-        for line in f:
-            if line.strip() != "":
-                li.append(line.strip())
-    return li
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('input', type=str, help='CONLL format input filename')
-    parser.add_argument('--punc', default=None, type=str, help='File contains list of pos tags for punctuations in the treebank, each in one line')
-    parser.add_argument('--cont', default=None, type=str, help='File contains list of pos tags for content in the treebank, each in one line')
-    parser.add_argument('--with_dep_label', action='store_true', help='Wether to output dependency label too; default: False')
-    args = parser.parse_args()
-
-    puncList = getList(args.punc) # list contains contains list of pos tags for punctuations in the treebank
-    contList = getList(args.cont) # list contains contains list of pos tags for content in the treebank
-
-    count = 0
-    print("# ID=%d SCORE=1.0000" % count)
-    with open(args.input, "r") as f:
+    if len(sys.argv) < 2:
+        sys.exit("you must provide filename")
+    
+    with open(sys.argv[1],"r") as f:
         for line in f:
             line = line.rstrip()
-            if line=="":
-                count += 1
-                print("\n# ID=%d SCORE=1.000" % count)
+            if line.startswith("#") or line=="":
+                print(line)
                 continue
-
             tokens = list(map(lambda x: int(x) if re.search(r'^(\d)*$', x) else x, line.split("\t")))
+            # tokens = list(map(lambda x: int(x) if x.isdigit() else x, line.split("\t")))
             id = tokens[0] - 1
             surface = tokens[1]
-            lemma = tokens[2]
             pos = tokens[3]
-            pos2 = tokens[4]
-            features = tokens[5]
             dep_id = tokens[6] - 1
-            dep_label = tokens[7]
-            # projective_head = tokens[8]
-            # projective_dependency_label = tokens[9]
-            isCont = pos in contList
-
-            if pos in puncList:
+            isCont = isContent(pos)
+            if pos == "PU":
                 isCont = "-1"
             elif isCont:
                 isCont = "1"
             else:
                 isCont = "0"
-            ebmtFormatList = [id, dep_id, surface, lemma, pos, isCont, pos, "_", "_"]
-            if args.with_dep_label:
-                ebmtFormatList.append(dep_label)
-            print("\t".join(map(str,ebmtFormatList)))
+            print("%d\t%d\t%s\t%s\t%s\t%s\t%s\t_\t_" % (id, dep_id, surface, surface, pos, isCont, pos))

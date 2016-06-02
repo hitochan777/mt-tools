@@ -11,7 +11,12 @@ delimiter = args.delimiter
 
 for line in fileinput.input("-"):
     prevToken = None
-    for token in line.split(" "):
+    tokens = line.split(" ") 
+    if "Infinity" in tokens[0]:
+        print("%s%s%s " % ("___DUMMY___", delimiter, "NN"))
+        continue
+
+    for token in tokens:
         if token[-1] == ')' and len(token) > 1:
             closingMarkerLocation = token.find(')')
             tokenName = token[0:closingMarkerLocation]
