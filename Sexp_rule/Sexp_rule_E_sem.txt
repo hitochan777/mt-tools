@@ -1,0 +1,170 @@
+@normal
+[PP     , "L", ["IN", "TO", "VBG", "VBN", "RP", "FW"]]
+[SINV   , "R", ["VBZ", "VBD", "VBP", "VB", "MD", "VP", "@S", "SINV", "ADJP", "NP"]]
+[@S      , "R", ["TO", "IN", "VP", "@S", "SBAR", "ADJP", "UCP", "NP"]]
+[WHNP   , "R", ["WDT", "WP", "WP$", "WHADJP", "WHPP", "WHNP"]]
+[NP     , "R", ["(POS|NN|NNP|NNPS|NNS)", "NX", "JJR", "CD", "JJ", "JJS", "RB", "QP", "NP"]]
+[NX     , "R", ["(POS|NN|NNP|NNPS|NNS)", "NX", "JJR", "CD", "JJ", "JJS", "RB", "QP", "NP"]]
+[SQ     , "R", ["VBZ", "VBD", "VBP", "VB", "AUX", "MD", "VP", "SQ"]]
+[WHADVP , "L", ["CC", "WRB"]]
+[VP     , "L", ["VBD", "VBN", "MD", "VBZ", "VB", "VBG", "VBP", "AUX", "VP", "ADJP", "NN", "NNS", "NP"]]
+[RRC    , "L", ["VP", "NP", "ADVP", "ADJP", "PP"]]
+[ADVP   , "L", ["RB", "RBR", "RBS", "FW", "ADVP", "TO", "CD", "JJR", "JJ", "IN", "NP", "JJS", "NN"]]
+[NAC    , "R", ["(NN|NNP|NNPS|NNS)", "NP", "NAC", "EX", "$", "CD", "QP", "PRP", "VBG", "JJ", "JJS", "JJR", "ADJP", "FW"]]
+[SBARQ  , "R", ["SQ", "@S", "SINV", "SBARQ", "FRAG"]]
+[CONJP  , "L", ["CC", "RB", "IN"]]
+[WHADJP , "R", ["CC", "WRB", "JJ", "ADJP"]]
+[QP     , "R", ["$", "IN", "NNS", "NN", "JJ", "RB", "DT", "CD", "QP", "JJR", "JJS"]]
+[PRT    , "L", ["RP"]]
+[ADJP   , "R", ["NNS", "QP", "NN", "$", "ADVP", "JJ", "VBN", "VBG", "ADJP", "JJR", "NP", "JJS", "DT", "FW", "RBR", "RBS", "SBAR", "RB"]]
+[LST    , "L", ["LS", ":"]]
+[SBAR   , "R", ["WHNP", "WHPP", "WHADVP", "WHADJP", "IN", "DT", "@S", "SQ", "SINV", "SBAR", "FRAG"]]
+[WHPP   , "L", ["IN", "TO", "FW"]]
+# [PRN    , "R", []]
+# [INTJ   , "R", []]
+# [UCP    , "L", []]
+# [FRAG   , "L", []]
+
+# old rules
+# ["@S", ["VP", "ADJP", "@S"]]
+# ["SBAR", ["WHNP", "@S"]]
+# ["SQ", ["VP", "ADJP", "AUX"]]
+# ["SBARQ", ["SQ", "@S"]]
+# ["SINV", ["@S", "VP"]]
+# ["VP", ["VB", "VBP", "VBZ", "VBN", "VBD", "VBG", "VP", "AUX"]]
+# ["NP", ["NN", "NNS", "NNP", "NP"]]
+# ["WHNP", ["NN", "NNS", "JJ", "WHNP"]]
+# ["ADJP", ["JJ", "JJR", "JJS", "VBN", "ADJP"]]
+# ["WHADJP", ["JJ", "JJR", "JJS"]]
+# ["ADVP", ["RB", "RBR", "RBS", "ADVP"]]
+# ["WHADVP", ["RB", "RBR", "RBS", "NN", "NNS"]]
+# [".", ["."]]
+
+@exception
+["@S;@S;CC;@S", 2]
+["@S;@S;CC;SQ", 2]
+["@S;@S;CC;SBARQ", 2]   # Excuse me, but where ....
+["S;@S;CC;SBARQ", 2]   # Excuse me, but where ....
+["@S;@S;IN;@S", 2]
+["@S;@S;@S", 1]
+["VP;VP;CC;VP", 2]
+["FRAG;WHADVP;NP", 1] # how many bags.
+
+["NP;QP;NP;QP", "2"]  # phone number
+["NP;NP;QP", "1"]     # phone number or room number etc...
+
+["NP;NP;:;NP", "0"]   # A: a, b, and c ....
+
+["NP;NN;JJ", "0"]     # something casual
+["NP;NN;JJR", "0"]    # something lighter
+["NP;NN;RB", "0"]     # something else
+["NP;DT;JJ;NP;NN", "3"]	 # an annual (New Year 's) event
+# ["NP;RB;DT;JJ", "2:1"]     # almost the same
+# ["NP;RB;DT;NN;NN", "3:1,2"]     # only the organization policy
+# ["NP;RB;PDT;DT;NNS", "3:2"]     # almost all the members
+
+["NP;DT;NNS;SBAR", "1"]     # the grounds that...
+["NP;DT;ADJP;NN;NN", "3"]      # a highly efficient introduction method
+
+["ADJP;RBS;JJ", "1"]  # most attractive
+["ADJP;RBR;JJ", "1"]  # less expensive
+["ADJP;RBS;VBN", "1"] # most publicized
+["ADJP;RBR;VBN", "1"] # less expensive
+# ["ADJP;RB;JJ", "1"]   # too long / rather hot
+["ADJP;RB;JJR", "1"]  # much higher
+["ADJP;CD;NN", "1"]   # (a) one hour (break) / (the) ten dollar (deposit)
+["ADJP;QP;NN", "1"]   # two hundred pound / two thirty p.m.
+["ADJP;RB;DT", "1"]   # almost every
+
+##########################################################################
+# NEW
+
+["VP;AUX;S(TO/to)", "0"]         # have to V
+["VP;VB(like);S(TO/to)", "0"]    # would like to V
+["VP;VBP(want);S(TO/to)", "0"]   # want to V
+["VP;VBZ(wants);S(TO/to)", "0"]  # wants to V
+["VP;VBD(wanted);S(TO/to)", "0"] # wanted to V
+["VP;VBG(going);S(TO/to)", "0"]  # going to V
+
+["ADJP;JJ(able);S(TO/to)", "0"]  # able to V
+
+["VP;AUX;RB(n.t);VP", "2"]   # is not swimming ... / don't swim ...0
+["VP;AUX;RB;VP", "2"]          # is RB swimming ...0
+["VP;AUX;ADVP;VP", "2"]        # is ADVP swimming ...0
+
+["VP;AUX;RB(n.t);NP", "0"]     # is not a boy
+["VP;AUX;RB(n.t);ADVP;NP", "0"]# is not always a boy
+
+["VP;MD;RB(n.t);VP", "2"]    # will not go0
+["VP;MD;ADVP;VP", "2"]         # will soon go0
+["VP;MD;RB(n.t);ADVP;VP", "3"] # won't always go0
+
+["VP;AUX(had);ADJP(better);VP", "0"] # had better go
+["VP;AUX(had);ADJP(better);@S", "0"]  # had better not go
+
+["VP;AUX;ADJP", "1"]           # is beautiful0
+["VP;AUX;RB(n.t);ADJP", "2"] # was not happy with ...0
+["VP;AUX;ADVP;ADJP", "2"]    # is already happy with ...0
+["VP;AUX;RB(n.t);ADVP;ADJP", "3"] # is not already happy with ...0
+
+["VP;AUX;ADJP;@S", "1"]                # was absurd of me to think ...0
+["VP;AUX;RB(n.t);ADJP;@S", "2"]      # was not absurd of me to think ...0
+["VP;AUX;ADVP;ADJP;@S", "2"]	    #0
+["VP;AUX;RB(n.t);ADVP;ADJP;@S", "3"] #0
+
+["VP;VBD;VP", "1"]             # was opposed ... (passive past tense)0
+["VP;VBN;VP", "1"]               # has been sold ...0
+["VP;VBZ;VP", "1"]               # has been sold ...0
+["VP;VBP;VP", "1"]               # be allowed0
+["VP;VBG;VP", "1"]               # is being announced0
+
+["@S;RB(not);VP", "1"]            # not V (had better not V)
+
+["SQ;AUX;NP;VP", "2"]          # Do you
+["SQ;AUX;RB(n.t);NP;VP", "3"]  # Do not you
+["SQ;AUX;NP;ADVP;VP", "3"]
+["SQ;AUX;RB(n.t);NP;ADVP;VP", "4"]
+["SQ;@S;AUX;NP;VP", "3"]          # Do you
+["SQ;@S;AUX;RB(n.t);NP;VP", "4"]# Do not you
+["SQ;@S;AUX;NP;ADVP;VP", "4"]
+["SQ;@S;AUX;RB(n.t);NP;ADVP;VP", "5"]
+
+["SQ;MD;NP;VP", "2"]             # Can I 0
+["SQ;MD;RB(n.t);NP;VP", "3"]   # Can not I0
+["SQ;MD;NP;ADVP;VP", "3"] #0
+["SQ;MD;RB(n.t);NP;ADVP;VP", "4"] #0
+["SQ;@S;MD;NP;VP", "3"]           # Can I 
+["SQ;@S;MD;RB(n.t);NP;VP", "4"] # Can not I1
+["SQ;@S;MD;NP;ADVP;VP", "4"] #1
+["SQ;@S;MD;RB(n.t);NP;ADVP;VP", "5"] #1
+
+["SQ;AUX;NP;ADJP", "0"]             # is she beautiful
+["SQ;AUX;RB(n.t);NP;ADJP", "0"]   # is not she beautiful
+["SQ;@S;AUX;NP;ADJP", "1"]           # is she beautiful
+["SQ;@S;AUX;RB(n.t);NP;ADJP", "1"] # is not she beautiful
+
+["SQ;AUX;RB(n.t);NP;NP", "0"] # is not he a boy
+["SQ;AUX;RB(n.t);NP;ADVP;NP", "0"]
+["SQ;@S;AUX;RB(n.t);NP;NP", "1"] # is not he a boy
+["SQ;@S;AUX;RB(n.t);NP;ADVP;NP", "1"]
+
+["PP;ADVP;IN;NP", "1"]	# right on the desk
+["VP;TO;ADVP;VP", "0"]   # to somehow chip ...
+
+["SBAR;RB;IN;@S", "0"]    # so that ...
+
+##########################################################################
+
+["VP;AUX;VP", "1"]    # had given ...0
+["VP;MD;VP", "1"]     # can give ...0
+["VP;VB;VP", "1"]     # please give ...
+["VP;TO;VP", "0"]     # to give ...
+["PP;IN;NP", "0"]     # in NP
+["PP;TO;NP", "0"]     # to NP
+["PP;IN;@S", "0"]      # at singing ... before boarding / about going ... ***
+["PP;IN;ADVP", "0"]   # around here
+["PP;IN;SBAR", "0"]   # about what 
+["PP;IN;PP", "0"]     # analysis error -> "up to ... / out of ... / RP" (be out at the moment)
+["PP;NP;IN;NP", "0"]  # analysis error -> 90 days after initiation
+
+["SBAR;IN;@S", "0"]    # while I play ... / that I do n't ... / since ...
