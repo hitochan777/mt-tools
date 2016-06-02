@@ -1,4 +1,14 @@
 #!/usr/bin/env perl
+# You can run this program to convert constituency parse trees to dependency trees as follows:
+# perl ps2xml.pl -l English -k 1 -rule_file Sexp_rule/Sexp_rule_E_sem.txt > output_file 
+# The conversion rule file Sexp_rule/Sexp_rule_E_sem.txt is made based on 
+# @phdthesis{Collins:1999,
+# author = {Collins, Michael},
+# title = {Head-Driven Statistical Models for Natural Language Parsing},
+# school = {University of Pennsylvania},
+# year = {1999},
+# }
+# and modified slightly so as to use semantic head.
 
 use strict;
 use FindBin qw($Bin);
